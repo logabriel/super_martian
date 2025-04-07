@@ -42,9 +42,15 @@ PLAYER_SPEED = 80
 
 GRAVITY = 980
 
-NUM_LEVELS = 1
+NUM_LEVELS = 2
 
 BASE_DIR = pathlib.Path(__file__).parent
+
+# The spawn position of the player in each level
+SPAWN_PLAYER = {
+    1: (0, VIRTUAL_HEIGHT - 66),
+    2: (0, VIRTUAL_HEIGHT - 80),
+}
 
 LevelLoader = loaders.TmxLevelLoader
 

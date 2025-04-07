@@ -28,6 +28,8 @@ class PlayState(BaseState):
     def enter(self, **enter_params: Dict[str, Any]) -> None:
         self.level = enter_params.get("level", 1)
         self.game_level = enter_params.get("game_level")
+        (self.spanw_player_x , self.spawn_player_y) = settings.SPAWN_PLAYER[self.level]
+
         if self.game_level is None:
             self.game_level = GameLevel(self.level)
             pygame.mixer.music.load(
@@ -38,8 +40,11 @@ class PlayState(BaseState):
         self.tilemap = self.game_level.tilemap
         self.player = enter_params.get("player")
         if self.player is None:
-            self.player = Player(0, settings.VIRTUAL_HEIGHT - 66, self.game_level)
+            self.player = Player(self.spanw_player_x, self.spawn_player_y, self.game_level)
             self.player.change_state("idle")
+        else:
+            self.player.game_level = self.game_level
+            self.player.tilemap = self.tilemap
 
         self.camera = enter_params.get("camera")
 
