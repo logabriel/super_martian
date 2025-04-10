@@ -26,7 +26,7 @@ def pickup_coin(
     settings.SOUNDS["pickup_coin"].play()
     player.score += points
     player.coins_counter[color] += 1
-    
+
     if not player.game_level.winNextLevel:
         Timer.after(time, lambda: coin.respawn())
 
@@ -47,10 +47,10 @@ def pickup_yellow_coin(coin: GameItem, player: Player):
     pickup_coin(coin, player, 50, 54, random.uniform(20, 25))
 
 def pickup_key(keys: GameItem, player: Player):
-    print("Pickup key")
+    player.key = True  
 
 def block_active(active_block: GameItem, player: Player):
-    print("block active")
+    pass
 
 
 ITEMS: Dict[str, Dict[int, Dict[str, Any]]] = {
@@ -87,7 +87,7 @@ ITEMS: Dict[str, Dict[int, Dict[str, Any]]] = {
     "active-block": {
         8: {
             "texture_id": "key-gold",
-            "solidness": dict(top=True, right=True, bottom=True, left=True),
+            "solidness": dict(top=False, right=False, bottom=True, left=False),
             "consumable": False,
             "collidable": True, 
             "on_consume": block_active,
@@ -97,7 +97,7 @@ ITEMS: Dict[str, Dict[int, Dict[str, Any]]] = {
         0: {
             "texture_id": "key-gold",
             "solidness": dict(top=False, right=False, bottom=False, left=False),
-            "consumable": True,
+            "consumable": False,
             "collidable": True, 
             "on_consume": pickup_key,
         },

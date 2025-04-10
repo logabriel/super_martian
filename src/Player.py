@@ -14,6 +14,7 @@ from gale.input_handler import InputData
 
 from src.GameEntity import GameEntity
 from src.states.entities import player_states
+from src.GameItem import GameItem
 
 
 class Player(GameEntity):
@@ -40,6 +41,24 @@ class Player(GameEntity):
         )
         self.score = 0
         self.coins_counter = {54: 0, 55: 0, 61: 0, 62: 0}
+        self.key = False
 
     def on_input(self, input_id: str, input_data: InputData) -> None:
         self.state_machine.on_input(input_id, input_data)
+    
+    def collision_on_top(self) -> bool:
+        collision_rect = self.get_collision_rect()
+
+        # Row for the center of the player
+        i = self.tilemap.to_i(collision_rect.centery)
+
+        # Left and right columns
+        left = self.tilemap.to_j(collision_rect.left)
+        right = self.tilemap.to_j(collision_rect.right)
+
+        if self.tilemap.collides_tile_on(
+            i - 1, left, self, GameItem.BOTTOM
+        ) or self.tilemap.collides_tile_on(i - 1, right, self, GameItem.BOTTOM):
+            return True
+
+        return False

@@ -21,6 +21,7 @@ class TransitionState(BaseState):
             self.player = None
         else:
             self.level = 2
+            self.player.key = False
             self.player.x = settings.SPAWN_PLAYER[self.level][0]
             self.player.y = settings.SPAWN_PLAYER[self.level][1]
             self.player.vx = 0
