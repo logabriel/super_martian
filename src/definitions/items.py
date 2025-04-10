@@ -26,7 +26,9 @@ def pickup_coin(
     settings.SOUNDS["pickup_coin"].play()
     player.score += points
     player.coins_counter[color] += 1
-    Timer.after(time, lambda: coin.respawn())
+    
+    if not player.game_level.winNextLevel:
+        Timer.after(time, lambda: coin.respawn())
 
 
 def pickup_green_coin(coin: GameItem, player: Player):
@@ -43,6 +45,12 @@ def pickup_red_coin(coin: GameItem, player: Player):
 
 def pickup_yellow_coin(coin: GameItem, player: Player):
     pickup_coin(coin, player, 50, 54, random.uniform(20, 25))
+
+def pickup_key(keys: GameItem, player: Player):
+    print("Pickup key")
+
+def block_active(active_block: GameItem, player: Player):
+    print("block active")
 
 
 ITEMS: Dict[str, Dict[int, Dict[str, Any]]] = {
@@ -74,6 +82,24 @@ ITEMS: Dict[str, Dict[int, Dict[str, Any]]] = {
             "consumable": True,
             "collidable": True,
             "on_consume": pickup_yellow_coin,
+        },
+    },
+    "active-block": {
+        8: {
+            "texture_id": "key-gold",
+            "solidness": dict(top=True, right=True, bottom=True, left=True),
+            "consumable": False,
+            "collidable": True, 
+            "on_consume": block_active,
+        },
+    },
+    "key": {
+        0: {
+            "texture_id": "key-gold",
+            "solidness": dict(top=False, right=False, bottom=False, left=False),
+            "consumable": True,
+            "collidable": True, 
+            "on_consume": pickup_key,
         },
     }
 }

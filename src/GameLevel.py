@@ -24,6 +24,7 @@ class GameLevel:
         self.creatures = []
         self.items = []
         settings.LevelLoader().load(self, settings.TILEMAPS[num_level])
+        self.winNextLevel = False
 
     def add_item(self, item_data: Dict[str, Any]) -> None:
         item_name = item_data.pop("item_name")

@@ -58,12 +58,14 @@ TEXTURES = {
     "tiles": pygame.image.load(BASE_DIR / "assets" / "textures" / "tileset.png"),
     "martian": pygame.image.load(BASE_DIR / "assets" / "textures" / "martian.png"),
     "creatures": pygame.image.load(BASE_DIR / "assets" / "textures" / "creatures.png"),
+    "key-gold": pygame.image.load(BASE_DIR / "assets" / "textures" / "key-gold.png"),
 }
 
 FRAMES = {
     "tiles": frames.generate_frames(TEXTURES["tiles"], 16, 16),
     "martian": frames.generate_frames(TEXTURES["martian"], 16, 20),
     "creatures": frames.generate_frames(TEXTURES["creatures"], 16, 16),
+    "key-gold": frames.generate_frames(TEXTURES["key-gold"], 16, 16),
 }
 
 TILEMAPS = {
@@ -79,6 +81,7 @@ SOUNDS = {
     "jump": pygame.mixer.Sound(BASE_DIR / "assets" / "sounds" / "jump.wav"),
     "timer": pygame.mixer.Sound(BASE_DIR / "assets" / "sounds" / "timer.wav"),
     "count": pygame.mixer.Sound(BASE_DIR / "assets" / "sounds" / "count.wav"),
+    "win": pygame.mixer.Sound(BASE_DIR / "assets" / "sounds" / "winfretless.wav"),
 }
 
 SOUNDS["pickup_coin"].set_volume(0.5)
