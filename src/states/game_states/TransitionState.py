@@ -56,27 +56,27 @@ class TransitionState(BaseState):
         else:
             # Mostrar texto cuando la transición termine
 
-        render_text(
-            surface,
-            f"Next level {self.level}",
-            settings.FONTS["medium"],
-            settings.VIRTUAL_WIDTH // 2,
-            20,
-            (255, 255, 255),
-            center=True,
-            shadowed=True,
-        )
-
-        render_text(
-            surface,
-            "press enter to continue",
-            settings.FONTS["medium"],
-            settings.VIRTUAL_WIDTH // 2,
-            settings.VIRTUAL_HEIGHT // 2,
-            (197, 195, 198),
-            center=True,
-            shadowed=True,
-        )
+            render_text(
+                surface,
+                f"Next level {self.level}",
+                settings.FONTS["medium"],
+                settings.VIRTUAL_WIDTH // 2,
+                20,
+                (255, 255, 255),
+                center=True,
+                shadowed=True,
+            )
+    
+            render_text(
+                surface,
+                "press enter to continue",
+                settings.FONTS["medium"],
+                settings.VIRTUAL_WIDTH // 2,
+                settings.VIRTUAL_HEIGHT // 2,
+                (197, 195, 198),
+                center=True,
+                shadowed=True,
+            )
 
     def on_input(self, input_id: str, input_data: InputData) -> None:
         if not self.transitioning and input_id == "enter" and input_data.pressed:
