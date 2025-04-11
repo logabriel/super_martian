@@ -15,6 +15,8 @@ class TransitionState(BaseState):
     def enter(self, **enter_params: Dict[str, Any]) -> None:
         self.level = enter_params.get("level")
         self.player = enter_params.get("player")
+        self.radius = max(settings.VIRTUAL_WIDTH, settings.VIRTUAL_HEIGHT)  # Radio inicial del círculo
+        self.transitioning = True  # Indica si la transición está activa
 
         if self.level == 2:
             self.level = 1
@@ -34,12 +36,25 @@ class TransitionState(BaseState):
         )
         pygame.mixer.music.play()
     
-    def exit(self) -> None:
-        pygame.mixer.music.stop()
-        pygame.mixer.music.unload()
+    def update(self, dt: float) -> None:
+        if self.transitioning:
+            self.radius -= 500 * dt  # Reducir el radio gradualmente
+            if self.radius <= 0:
+                self.transitioning = False  # Finalizar la transición
 
     def render(self, surface: pygame.Surface) -> None:
-        surface.fill((25, 130, 196))
+        surface.fill((0, 0, 0))  # Fondo negro
+
+        # Dibujar el círculo de transición
+        if self.transitioning:
+            pygame.draw.circle(
+                surface,
+                (255, 255, 255),  # Color del círculo
+                (settings.VIRTUAL_WIDTH // 2, settings.VIRTUAL_HEIGHT // 2),
+                max(0, int(self.radius)),
+            )
+        else:
+            # Mostrar texto cuando la transición termine
 
         render_text(
             surface,
@@ -64,7 +79,7 @@ class TransitionState(BaseState):
         )
 
     def on_input(self, input_id: str, input_data: InputData) -> None:
-        if input_id == "enter" and input_data.pressed:
+        if not self.transitioning and input_id == "enter" and input_data.pressed:
             self.state_machine.change(
                 "play",
                 level=self.level,
