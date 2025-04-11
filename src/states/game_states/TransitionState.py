@@ -18,6 +18,13 @@ class TransitionState(BaseState):
         self.radius = max(settings.VIRTUAL_WIDTH, settings.VIRTUAL_HEIGHT)  # Radio inicial del círculo
         self.transitioning = True  # Indica si la transición está activa
 
+        # Crear una superficie temporal para capturar el estado previo
+        self.previous_surface = pygame.Surface((settings.VIRTUAL_WIDTH, settings.VIRTUAL_HEIGHT))
+        game_level = GameLevel(self.level)
+        game_level.render(self.previous_surface)
+        self.player.render(self.previous_surface)
+
+
         if self.level == 2:
             self.level = 1
             self.player = None
@@ -38,24 +45,32 @@ class TransitionState(BaseState):
     
     def update(self, dt: float) -> None:
         if self.transitioning:
-            self.radius -= 500 * dt  # Reducir el radio gradualmente
+            self.radius -= 300 * dt  # Reducir el radio gradualmente
             if self.radius <= 0:
                 self.transitioning = False  # Finalizar la transición
 
     def render(self, surface: pygame.Surface) -> None:
-        surface.fill((0, 0, 0))  # Fondo negro
-
-        # Dibujar el círculo de transición
         if self.transitioning:
+            # Dibujar el estado previo en la superficie principal
+            surface.blit(self.previous_surface, (0, 0))
+
+            # Crear una superficie temporal con transparencia
+            mask_surface = pygame.Surface((settings.VIRTUAL_WIDTH, settings.VIRTUAL_HEIGHT), pygame.SRCALPHA)
+            mask_surface.fill((0, 0, 0, 255))  # Fondo negro opaco
+
+            # Dibujar un círculo transparente en el centro
             pygame.draw.circle(
-                surface,
-                (255, 255, 255),  # Color del círculo
+                mask_surface,
+                (0, 0, 0, 0),  # Transparente
                 (settings.VIRTUAL_WIDTH // 2, settings.VIRTUAL_HEIGHT // 2),
                 max(0, int(self.radius)),
             )
-        else:
-            # Mostrar texto cuando la transición termine
 
+            # Aplicar la máscara a la superficie principal
+            surface.blit(mask_surface, (0, 0))
+        else:
+            # Fondo negro y texto del siguiente nivel
+            surface.fill((0, 0, 0))  # Fondo negro
             render_text(
                 surface,
                 f"Next level {self.level}",
@@ -66,7 +81,6 @@ class TransitionState(BaseState):
                 center=True,
                 shadowed=True,
             )
-    
             render_text(
                 surface,
                 "press enter to continue",
@@ -85,3 +99,4 @@ class TransitionState(BaseState):
                 level=self.level,
                 player=self.player,
             )
+
